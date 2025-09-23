@@ -1,0 +1,11 @@
+python-dotenv==1.1.1
+requests==2.31.0
+pandas==2.3.2
+langchain==0.3.27
+langchain-openai==0.3.33
+langgraph==0.6.7
+pandasai==3.0.0b19
+pandasai-openai==0.1.6
+pandasai-litellm==0.0.1
+markdown-pdf==1.9
+streamlit==1.49.1
