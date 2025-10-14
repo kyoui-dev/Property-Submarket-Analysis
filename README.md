@@ -12,7 +12,7 @@ This project implements an AI workflow for **Property Submarket Analysis**, usin
 - ArcGIS Username/Password
 - OpenAI API Key
 
-### Environment Variables
+### Environments
 Copy the `.env.sample` file to `.env` and fill in your API keys.
 ```
 cp .env.sample .env
