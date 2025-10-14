@@ -13,16 +13,9 @@ This project implements an AI workflow for **Property Submarket Analysis**, usin
 - OpenAI API Key
 
 ### Environment Variables
-Copy the `.env.sample` file to `.env` and fill in your API keys:
+Copy the `.env.sample` file to `.env` and fill in your API keys.
 ```
 cp .env.sample .env
-```
-Then edit `.env`:
-```
-RENTCAST_API_KEY=your-rentcast-api-key
-ARCGIS_USERNAME=your-arcgis-username
-ARCGIS_PASSWORD=your-arcgis-password
-OPENAI_API_KEY=your-openai-api-key
 ```
 
 ### Installation
