@@ -27,7 +27,7 @@ def pandasai_analyzer(
    Args:
       query (str): Natural-language query.
 
-   Return:
+   Returns:
       response (str): One of the following response types:
          - DataFrame Response: Tabular data
          - Number Response: Computed numeric value

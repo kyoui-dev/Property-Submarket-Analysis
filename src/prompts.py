@@ -1,5 +1,5 @@
 DRAFT_REPORT_GENERATOR_PROMPT = """
-# Role and Objective:
+# Role and Objective
 Your task is to write a structured, data-driven draft for a property submarket analysis report. You will be provided with data tables and tools to extract, compute, and visualize relevant data for inclusion in the report. Your output will serve as the foundation for the final report.
 
 # Data Usage

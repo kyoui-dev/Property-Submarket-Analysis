@@ -9,7 +9,7 @@ from langgraph.prebuilt import create_react_agent
 from langchain_openai import ChatOpenAI
 from markdown_pdf import MarkdownPdf, Section
 
-from src.state import State, AgentState
+from src.state import State, AnalyzerState
 from src.tools import pandasai_analyzer
 from src.prompts import (
     DRAFT_REPORT_GENERATOR_PROMPT,
@@ -27,7 +27,6 @@ from config import (
     MAX_RETRIES,
     OUTPUT_DIR
 )
-
 
 logging.basicConfig(
     level=logging.INFO,
@@ -55,7 +54,7 @@ def retry():
 
 def subject_property_collector(state: State):
     logger.info(f"[subject_property_collector] Started subject property collecting.")
-    address = state.address
+    address = state["address"]
     id = address.replace(" ", "-")
     url = f"{RENTCAST_URL}/properties/{id}"
     headers = {"X-Api-Key": RENTCAST_API_KEY}
@@ -68,8 +67,8 @@ def subject_property_collector(state: State):
 
 def sale_listings_collector(state: State):
     logger.info(f"[sale_listings_collector] Started sale listings collecting.")
-    address = state.address
-    property_type = state.property_type
+    address = state["address"]
+    property_type = state["property_type"]
     url = f"{RENTCAST_URL}/listings/sale"
     headers = {"X-Api-Key": RENTCAST_API_KEY}
     params = {
@@ -95,8 +94,8 @@ def sale_listings_collector(state: State):
 
 def rental_listings_collector(state: State):
     logger.info(f"[rental_listings_collector] Started rental listings collecting.")
-    address = state.address
-    property_type = state.property_type
+    address = state["address"]
+    property_type = state["property_type"]
     url = f"{RENTCAST_URL}/listings/rental/long-term"
     headers = {"X-Api-Key": RENTCAST_API_KEY}
     params = {
@@ -122,7 +121,7 @@ def rental_listings_collector(state: State):
 
 def demographic_stats_collector(state: State):
     logger.info(f"[demographic_stats_collector] Started demographic statistics collecting.")
-    address = state.address
+    address = state["address"]
     params = {
         "username": ARCGIS_USERNAME,
         "password": ARCGIS_PASSWORD,
@@ -177,7 +176,7 @@ def demographic_stats_collector(state: State):
 
 def subject_property_processor(state: State):
     logger.info(f"[subject_property_processor] Started subject property processing.")
-    subject_property = pd.json_normalize(state.subject_property)
+    subject_property = pd.json_normalize(state["subject_property"])
     subject_property.rename(columns={
         "hoa.fee": "hoaFee", 
         "owner.names": "ownerNames", 
@@ -204,8 +203,8 @@ def subject_property_processor(state: State):
 
 def sale_listings_processor(state: State):
     logger.info(f"[sale_listings_processor] Started sale listings processing.")
-    subject_property = state.subject_property[0]
-    sale_listings = state.sale_listings
+    subject_property = state["subject_property"][0]
+    sale_listings = state["sale_listings"]
     sale_listings = pd.json_normalize(sale_listings)
     sale_listings.rename(columns={"hoa.fee": "hoaFee"}, inplace=True)
     sale_listings["pricePerSquareFoot"] = (sale_listings["price"] / sale_listings["squareFootage"]).round(2)
@@ -263,8 +262,8 @@ def sale_listings_processor(state: State):
 
 def rental_listings_processor(state: State):
     logger.info(f"[rental_listings_processor] Started rental listings processing.")
-    subject_property = state.subject_property[0]
-    rental_listings = state.rental_listings
+    subject_property = state["subject_property"][0]
+    rental_listings = state["rental_listings"]
     rental_listings = pd.json_normalize(rental_listings)
     rental_listings.rename(columns={"hoa.fee": "hoaFee", "price": "rent"}, inplace=True)
     rental_listings["rentPerSquareFoot"] = (rental_listings["rent"] / rental_listings["squareFootage"]).round(2)
@@ -322,7 +321,7 @@ def rental_listings_processor(state: State):
 
 def demographic_stats_processor(state: State):
     logger.info(f"[demographic_stats_processor] Started demographic statistics processing.")
-    demographic_stats = state.demographic_stats
+    demographic_stats = state["demographic_stats"]
     demographic_stats = pd.DataFrame(demographic_stats)
     columns = [
         "AGEBASE_CY",
@@ -359,20 +358,20 @@ def demographic_stats_processor(state: State):
 @retry()
 def draft_report_generator(state: State):
     logger.info(f"[draft_report_generator] Started draft report generating.")
-    subject_property = state.subject_property
-    sale_listings = state.sale_listings
-    sale_comps = state.sale_comps
-    sale_listings_stats = state.sale_listings_stats
-    rental_listings = state.rental_listings
-    rental_comps = state.rental_comps
-    rental_listings_stats = state.rental_listings_stats
-    demographic_stats = state.demographic_stats
+    subject_property = state["subject_property"]
+    sale_listings = state["sale_listings"]
+    sale_comps = state["sale_comps"]
+    sale_listings_stats = state["sale_listings_stats"]
+    rental_listings = state["rental_listings"]
+    rental_comps = state["rental_comps"]
+    rental_listings_stats = state["rental_listings_stats"]
+    demographic_stats = state["demographic_stats"]
     llm = ChatOpenAI(model=OPENAI_MODEL)
     agent = create_react_agent(
         model=llm,
         tools=[pandasai_analyzer],  
         prompt=DRAFT_REPORT_GENERATOR_PROMPT,
-        state_schema=AgentState
+        state_schema=AnalyzerState
     )
     response = agent.invoke({
         "messages": "Generate a draft report.",
@@ -393,7 +392,7 @@ def draft_report_generator(state: State):
 @retry()
 def final_report_generator(state: State):
     logger.info(f"[final_report_generator] Started final report generating.")
-    draft_report = state.draft_report
+    draft_report = state["draft_report"]
     llm = ChatOpenAI(model=OPENAI_MODEL, verbosity="high")
     messages = [
         ("system", f"{FINAL_REPORT_GENERATOR_PROMPT}"),
@@ -407,7 +406,7 @@ def final_report_generator(state: State):
 
 def pdf_converter(state: State):
     logger.info(f"[pdf_converter] Started pdf converting.")
-    final_report = state.final_report
+    final_report = state["final_report"]
     pdf = MarkdownPdf(toc_level=3, optimize=True)
     pdf.add_section(Section(final_report, toc=False))
     output_path = f"{OUTPUT_DIR}/final_report_{uuid4().hex[:8]}.pdf"

@@ -5,8 +5,7 @@ import base64
 import streamlit as st
 
 from src.state import State
-from src.workflow import build_workflow
-
+from src.graph import build_graph
 
 logging.basicConfig(
     level=logging.INFO,
@@ -14,7 +13,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-workflow = build_workflow()
+
+workflow = build_graph()
 
 st.title("Automated Property Submarket Analysis")
 

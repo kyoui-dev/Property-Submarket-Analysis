@@ -16,7 +16,7 @@ from src.nodes import (
 )
 
 
-def build_workflow():
+def build_graph():
     builder = StateGraph(State)
 
     builder.add_node("subject_property_collector", subject_property_collector)
@@ -49,9 +49,4 @@ def build_workflow():
     builder.add_edge("final_report_generator", "pdf_converter")
     builder.add_edge("pdf_converter", END)
 
-    workflow = builder.compile()
-    
-    with open("./img/diagram.png", "wb") as f:
-        f.write(workflow.get_graph().draw_mermaid_png())
-
-    return workflow
+    return builder.compile()

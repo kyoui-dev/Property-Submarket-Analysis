@@ -47,7 +47,7 @@ python test.py
 
 ## Files
 - `data/`: Test cases
-- `output/`: Test results
+- `output/`: Report files
 - `state.py`: State definitions
 - `nodes.py`: Node definitions
 - `tools.py`: Tool definitions
