@@ -12,7 +12,7 @@ from config import PANDASAI_MODEL
 
 
 @tool
-def pandasai_analyzer(
+def data_analyzer(
       query: str, 
       subject_property: Annotated[list[dict], InjectedState("subject_property")],
       sale_listings: Annotated[list[dict], InjectedState("sale_listings")],

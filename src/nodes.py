@@ -167,8 +167,6 @@ def demographic_stats_collector(state: State):
         "f": "json"
     }
     response = requests.post(ARCGIS_ENRICH_URL, data=params)
-    data = response.json()
-    print(data)
     demographic_stats = response.json()["results"][0]["value"]["FeatureSet"][0]["features"][0]['attributes']
     logger.info(f"[demographic_stats_collector] Completed demographic statistics collecting.")
     return {"demographic_stats": [demographic_stats]}
@@ -358,6 +356,8 @@ def demographic_stats_processor(state: State):
 @retry()
 def draft_report_generator(state: State):
     logger.info(f"[draft_report_generator] Started draft report generating.")
+    address = state["address"]
+    property_type = state["property_type"]
     subject_property = state["subject_property"]
     sale_listings = state["sale_listings"]
     sale_comps = state["sale_comps"]
@@ -374,7 +374,7 @@ def draft_report_generator(state: State):
         state_schema=AnalyzerState
     )
     response = agent.invoke({
-        "messages": "Generate a draft report.",
+        "messages": f"Generate a draft report.\nAddress: {address}\nProperty Type: {property_type}",
         "subject_property": subject_property,
         "sale_listings": sale_listings,
         "sale_comps": sale_comps,
@@ -392,11 +392,13 @@ def draft_report_generator(state: State):
 @retry()
 def final_report_generator(state: State):
     logger.info(f"[final_report_generator] Started final report generating.")
+    address = state["address"]
+    property_type = state["property_type"]
     draft_report = state["draft_report"]
     llm = ChatOpenAI(model=OPENAI_MODEL, verbosity="high")
     messages = [
         ("system", f"{FINAL_REPORT_GENERATOR_PROMPT}"),
-        ("human", f"Draft Report:\n{draft_report}")
+        ("human", f"Address: {address}\nProperty Type: {property_type}\nDraft Report:\n{draft_report}")
     ]
     response = llm.invoke(messages)
     final_report = response.content

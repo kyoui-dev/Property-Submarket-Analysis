@@ -1,10 +1,14 @@
 [
     {
-    "property_type": "Multi-Family",
-    "address": "44 Croteau Ct , Manchester, NH 03104"
+    "property_type": "Single Family",
+    "address": "5500 Grand Lake Dr, San Antonio, TX 78244"
     },
     {
-    "property_type": "Multi-Family",
-    "address": "15044 87th Rd, Jamaica, NY 11432"
+    "property_type": "Single Family",
+    "address": "1824 Nw 32nd St, Oklahoma City, OK 73118"
+    },
+    {
+    "property_type": "Townhouse",
+    "address": "735 Tulip Grove Rd, Apt 126, Hermitage, TN 37076"
     }
 ]

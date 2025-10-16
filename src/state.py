@@ -5,8 +5,8 @@ from langgraph.prebuilt.chat_agent_executor import AgentState
 
 
 class State(TypedDict):
-    property_type: str
     address: str
+    property_type: str
     subject_property: list[dict]
     sale_listings: list[dict]
     sale_comps: list[dict]

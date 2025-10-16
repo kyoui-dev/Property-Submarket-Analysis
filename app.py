@@ -13,12 +13,12 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-
 workflow = build_graph()
 
 st.title("Automated Property Submarket Analysis")
 
 with st.form("property_form"):
+    address = st.text_input("Address *", placeholder="e.g. 1824 Nw 32nd St, Oklahoma City, OK 73118")
     property_type = st.selectbox(
     "Property Type *",
     options=[
@@ -31,7 +31,6 @@ with st.form("property_form"):
         "Land"
         ]
     )
-    address = st.text_input("Address *", placeholder="e.g. 44 Croteau Ct , Manchester, NH 03104")
     submitted = st.form_submit_button("Submit")
     
 if submitted:
@@ -40,12 +39,10 @@ if submitted:
     elif not re.match(r"^\d+\s+[\w\s]+\s*,\s*[\w\s]+\s*,\s*[A-Z]{2}\s*\d{5}$", address):
         st.error("Please enter the full property address in the format: Street Address, City, State ZIP (e.g. 44 Croteau Ct , Manchester, NH 03104)")
     else:
-        state = State(property_type=property_type, address=address)
-
         with st.spinner("Generating report..."):
             try:
                 logger.info("Workflow started.")
-                state = workflow.invoke(state)
+                state = workflow.invoke(State(address=address, property_type=property_type))
                 logger.info("Workflow completed.")
 
                 with open(state["output_path"], "rb") as f:

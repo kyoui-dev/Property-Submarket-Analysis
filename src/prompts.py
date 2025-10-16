@@ -251,13 +251,22 @@ Present top 5 comparable sale listings based on similarity to the subject proper
     - ABS(`sale_comps.yearBuilt` - `subject_property.yearBuilt`)
 - Select the top 5 listings after sorting. If fewer than five listings qualify, return all available matches and clearly note the shortfall.
 - Present the selected listings in a table using the format below:
-| addressLine1 | bedrooms | bathrooms | squareFootage | yearBuilt | price | pricePerSquareFoot|
-|:------------ |:---------|:----------|:--------------|:----------|:------|:------------------|
-|              |          |           |               |           |       |                   |
-|              |          |           |               |           |       |                   |
-|              |          |           |               |           |       |                   |
-|              |          |           |               |           |       |                   |
-|              |          |           |               |           |       |                   |
+| Address | Bedrooms | Bathrooms | Sq.Ft. | Vintage | Price | PPSF |
+|:--------|:---------|:----------|:-------|:--------|:------|:-----|
+|         |          |           |        |         |       |      |
+|         |          |           |        |         |       |      |
+|         |          |           |        |         |       |      |
+|         |          |           |        |         |       |      |
+|         |          |           |        |         |       |      |
+
+*Note*:
+- Address -> `addressLine1`
+- Bedrooms -> `bedrooms`
+- Bathrooms -> `bathrooms`
+- Sq.Ft. -> `squareFootage`
+- Vintage -> `yearBuilt`
+- Price -> `price`
+- PPSF -> `pricePerSquareFoot`
 
 ### Value Estimate
 Estimate the subject property’s value and create a scatter plot of sale listings by price and size.
@@ -304,13 +313,22 @@ Present top 5 comparable rental listings based on similarity to the subject prop
     - ABS(`rental_comps.yearBuilt` - `subject_property.yearBuilt`)
 - Select the top 5 listings after sorting. If fewer than five listings qualify, return all available matches and clearly note the shortfall.
 - Present the selected listings in a table using the format below:
-| addressLine1 | bedrooms | bathrooms | squareFootage | yearBuilt | rent | rentPerSquareFoot |
-|:------------ |:---------|:----------|:--------------|:----------|:-----|:------------------|
-|              |          |           |               |           |      |                   |
-|              |          |           |               |           |      |                   |
-|              |          |           |               |           |      |                   |
-|              |          |           |               |           |      |                   |
-|              |          |           |               |           |      |                   |
+| Address | Bedrooms | Bathrooms | Sq.Ft. | Vintage | Rent | RPSF |
+|:--------|:---------|:----------|:-------|:--------|:-----|:-----|
+|         |          |           |        |         |      |      |
+|         |          |           |        |         |      |      |
+|         |          |           |        |         |      |      |
+|         |          |           |        |         |      |      |
+|         |          |           |        |         |      |      |
+
+*Note*:
+- Address -> `addressLine1`
+- Bedrooms -> `bedrooms`
+- Bathrooms -> `bathrooms`
+- Sq.Ft. -> `squareFootage`
+- Vintage -> `yearBuilt`
+- Rent -> `rent`
+- RPSF -> `rentPerSquareFoot`
 
 ### Rent Estimate
 Estimate the subject property’s rent and create a scatter plot of rental listings by rent and size.
