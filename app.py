@@ -18,7 +18,7 @@ workflow = build_graph()
 st.title("Automated Property Submarket Analysis")
 
 with st.form("property_form"):
-    address = st.text_input("Address *", placeholder="e.g. 1824 Nw 32nd St, Oklahoma City, OK 73118")
+    address = st.text_input("Address *", placeholder="e.g. 5500 Grand Lake Dr, San Antonio, TX 78244")
     property_type = st.selectbox(
     "Property Type *",
     options=[
@@ -36,8 +36,8 @@ with st.form("property_form"):
 if submitted:
     if not property_type or not address:
         st.error("Property Type and Address are required.")
-    elif not re.match(r"^\d+\s+[\w\s]+\s*,\s*[\w\s]+\s*,\s*[A-Z]{2}\s*\d{5}$", address):
-        st.error("Please enter the full property address in the format: Street Address, City, State ZIP (e.g. 44 Croteau Ct , Manchester, NH 03104)")
+    elif not re.match(r"^(.+?),\s*([\w\s]+),\s*([A-Z]{2})\s*(\d{5})$", address):
+        st.error("Please enter the full property address in the format: Street Address, City, State ZIP (e.g. 5500 Grand Lake Dr, San Antonio, TX 78244)")
     else:
         with st.spinner("Generating report..."):
             try:
