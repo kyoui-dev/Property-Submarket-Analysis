@@ -10,7 +10,7 @@ from langchain_openai import ChatOpenAI
 from markdown_pdf import MarkdownPdf, Section
 
 from src.state import State, AnalyzerState
-from src.tools import pandasai_analyzer
+from src.tools import data_analyzer
 from src.prompts import (
     DRAFT_REPORT_GENERATOR_PROMPT,
     FINAL_REPORT_GENERATOR_PROMPT
