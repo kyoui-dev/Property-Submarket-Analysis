@@ -369,7 +369,7 @@ def draft_report_generator(state: State):
     llm = ChatOpenAI(model=OPENAI_MODEL)
     agent = create_react_agent(
         model=llm,
-        tools=[pandasai_analyzer],  
+        tools=[data_analyzer],  
         prompt=DRAFT_REPORT_GENERATOR_PROMPT,
         state_schema=AnalyzerState
     )
